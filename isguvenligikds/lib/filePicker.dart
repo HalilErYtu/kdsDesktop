@@ -4,20 +4,19 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert';
 import 'package:path/path.dart';
 import 'package:async/async.dart';
 
-class FilePickerDemo extends StatefulWidget {
-  const FilePickerDemo({super.key});
+class FilePickerPage extends StatefulWidget {
+  const FilePickerPage({super.key});
 
   @override
-  _FilePickerDemoState createState() => _FilePickerDemoState();
+  _FilePickerPageState createState() => _FilePickerPageState();
 }
 
 enum AlgorithmType { prefixspan, clofast, pfpmc }
 
-class _FilePickerDemoState extends State<FilePickerDemo> {
+class _FilePickerPageState extends State<FilePickerPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   String? _fileName;
@@ -30,6 +29,7 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
   bool _multiPick = false;
   FileType _pickingType = FileType.any;
   AlgorithmType _algorithmType = AlgorithmType.clofast;
+  bool _ispostsuccesful = false;
 
   TextEditingController _controller = TextEditingController();
 
@@ -59,24 +59,29 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
           break;
         case AlgorithmType.prefixspan:
           algorithm = "1";
-          break;     
+          break;
         case AlgorithmType.pfpmc:
           algorithm = "2";
           break;
       }
       io.File file = io.File(paths?.files.single.path ?? "");
-      var url = "https://isguvenligikds.azurewebsites.net/add_algorithm_data/" + algorithm;
+      var url =
+          "https://isguvenligikds.azurewebsites.net/add_algorithm_data/?algorithm_type=$algorithm";
       print("bişey");
-      var stream = new http.ByteStream(DelegatingStream.typed(file.openRead()));
+      var stream = http.ByteStream(DelegatingStream.typed(file.openRead()));
       var req = await http.MultipartRequest('POST', Uri.parse(url));
       var length = await file.length();
-      var multipartFile = new http.MultipartFile('file', stream, length,
+      var multipartFile = http.MultipartFile('file', stream, length,
           filename: basename(file.path));
       req.files.add(multipartFile);
       var response = await req.send();
       print(response.statusCode);
+      if (response.statusCode == 200)
+        _ispostsuccesful = true;
+      else
+        _ispostsuccesful = false;
     } on PlatformException catch (e) {
-      _logException('Unsupported operation' + e.toString());
+      _logException('Unsupported operation$e');
     } catch (e) {
       _logException(e.toString());
     }
@@ -119,7 +124,7 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
         _userAborted = path == null;
       });
     } on PlatformException catch (e) {
-      _logException('Unsupported operation' + e.toString());
+      _logException('Unsupported operation$e');
     } catch (e) {
       _logException(e.toString());
     } finally {
@@ -141,7 +146,7 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
         _userAborted = fileName == null;
       });
     } on PlatformException catch (e) {
-      _logException('Unsupported operation' + e.toString());
+      _logException('Unsupported operation$e');
     } catch (e) {
       _logException(e.toString());
     } finally {
@@ -180,8 +185,13 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
       home: Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: const Text('Veri yükleme sayfası'),
-        ),
+            title: const Text('Veri yükleme sayfası'),
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.only(left: 10.0, right: 10.0),
@@ -221,11 +231,11 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
                             padding: const EdgeInsets.only(bottom: 10.0),
                             child: const CircularProgressIndicator(),
                           )
-                        : _userAborted
+                        : _ispostsuccesful
                             ? Padding(
                                 padding: const EdgeInsets.only(bottom: 10.0),
                                 child: const Text(
-                                  'User has aborted the dialog',
+                                  'Veri Yüklendi',
                                 ),
                               )
                             : _directoryPath != null
@@ -252,12 +262,7 @@ class _FilePickerDemoState extends State<FilePickerDemo> {
                                                 _paths != null &&
                                                     _paths!.isNotEmpty;
                                             final String name =
-                                                'File $index: ' +
-                                                    (isMultiPath
-                                                        ? _paths!
-                                                            .map((e) => e.name)
-                                                            .toList()[index]
-                                                        : _fileName ?? '...');
+                                                'File $index: ${isMultiPath ? _paths!.map((e) => e.name).toList()[index] : _fileName ?? '...'}';
                                             final path = kIsWeb
                                                 ? null
                                                 : _paths!
