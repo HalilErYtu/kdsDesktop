@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:file_saver/file_saver.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io' as io;
 import 'package:file_picker/file_picker.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:path/path.dart';
 import 'package:async/async.dart';
+import 'package:path_provider/path_provider.dart';
 
 class RunAlgorithmPage extends StatefulWidget {
   const RunAlgorithmPage({super.key});
@@ -44,6 +46,11 @@ class _RunAlgorithmPageState extends State<RunAlgorithmPage> {
 
   void _saveFile() async {
     _resetState();
+    final directory = await getApplicationDocumentsDirectory();
+    final path = directory.path;
+    final file = File('$path/resultdata.txt');
+    file.writeAsString(_resultData);
+    setState(() {});
     //_write(_resultData);
   }
 
@@ -107,7 +114,7 @@ class _RunAlgorithmPageState extends State<RunAlgorithmPage> {
           appBar: AppBar(
               title: const Text('Algoritma Çalıştırma Sayfası'),
               leading: IconButton(
-                icon: Icon(Icons.arrow_back),
+                icon: const Icon(Icons.arrow_back),
                 onPressed: () {
                   Navigator.pop(context);
                 },

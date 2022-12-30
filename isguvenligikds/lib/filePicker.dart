@@ -31,7 +31,7 @@ class _FilePickerPageState extends State<FilePickerPage> {
   AlgorithmType _algorithmType = AlgorithmType.clofast;
   bool _ispostsuccesful = false;
 
-  TextEditingController _controller = TextEditingController();
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
