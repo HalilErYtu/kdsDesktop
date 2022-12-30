@@ -196,7 +196,7 @@ class _RunAlgorithmPageState extends State<RunAlgorithmPage> {
                               ),
                             ],
                           ))),
-                  const Text("\t \t \t \t Algoritmanın sonucu: "),
+                  const Text("            Algoritmanın sonucu: "),
                   Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: SizedBox(

@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Page'),
+        title: const Text('İş Güvenliği Karar Destek Sistemi'),
       ),
       body: Center(
         child: Column(
@@ -60,43 +60,50 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child:
-              ElevatedButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const FilePickerPage()));
-              },
-              child: const Text('Dosya yükleme sayfası'),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const FilePickerPage()));
+                },
+                child: const Text('Dosya yükleme sayfası'),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child:
-              ElevatedButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const GetDataPage()));
-              },
-              child: const Text('Veri görüntüleme sayfası'),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const GetDataPage()));
+                },
+                child: const Text('Veri görüntüleme sayfası'),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child:
-              ElevatedButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const RunAlgorithmPage()));
-              },
-              child: const Text('Algoritma çalıştırma sayfası'),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RunAlgorithmPage()));
+                },
+                child: const Text('Algoritma çalıştırma sayfası'),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child:
-              ElevatedButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const DataListPage()));
-              },
-              child: const Text('Datalar'),
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const DataListPage()));
+                },
+                child: const Text('Datalar'),
               ),
             ),
           ],
